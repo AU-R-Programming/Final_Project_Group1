@@ -1,4 +1,7 @@
-# final project 
+# final project
+
+#Task 1:
+
 
 # Calculate initial beta values, least squares = (XtX)^-1 %*% XTy
 initial_beta <- function(X, y) {
@@ -26,23 +29,24 @@ estimate_beta <- function(X, y, beta_init) {
 # putting above functions together
 opt_beta_est <- function(X, y){
   beta_initial <- initial_beta(X = X, y = y)
-  beta_opt <- estimate_beta(X = X, y = y, beta_init = beta_initial)
+  result <- estimate_beta(X = X, y = y, beta_init = beta_initial)
   cat("Estimated beta:", result$par, "\n")
+  return(result$par)
 }
 
 # simulating data for function
 simulate_data <- function(n, p, true_beta) {
   set.seed(123)  # For reproducibility
-  
+
   # Generate random predictor matrix X (standard normal distribution)
   X <- matrix(rnorm(n * p), nrow = n, ncol = p)
-  
+
   # Calculate p_i
   p_i <- 1 / (1 + exp(-X %*% true_beta)) # probability for y generation
-  
+
   # Generate binary response variable y
   y <- rbinom(n, size = 1, prob = p_i)
-  
+
   list(X = X, y = y)
 }
 
@@ -66,5 +70,40 @@ result <- estimate_beta(X, y, beta_init)
 cat("True beta:", beta_true, "\n")
 cat("Estimated beta:", result$par, "\n")
 
-# testing final function 
-opt_beta_est(X = X, y = y)
+# testing final function
+beta_opt <- opt_beta_est(X = X, y = y)
+
+
+
+
+
+
+
+#Task 3:
+
+
+# Confusion matrix metrics
+confusion_metrics <- function(y_true, y_pred) {
+  TP <- sum(y_true == 1 & y_pred == 1)
+  TN <- sum(y_true == 0 & y_pred == 0)
+  FP <- sum(y_true == 0 & y_pred == 1)
+  FN <- sum(y_true == 1 & y_pred == 0)
+
+  prevalence <- mean(y_true)
+  accuracy <- (TP + TN) / length(y_true)
+  sensitivity <- TP / (TP + FN)
+  specificity <- TN / (TN + FP)
+  FDR <- FP / (FP + TP)
+  DOR <- (TP / FN) / (FP / TN)
+
+  return(list(prevalence = prevalence, accuracy = accuracy, sensitivity = sensitivity,
+              specificity = specificity, FDR = FDR, DOR = DOR))
+}
+
+# Predict probabilities and calculate metrics
+p_hat <- 1 / (1 + exp(-X %*% beta_opt))
+y_pred <- ifelse(p_hat > 0.5, 1, 0)
+metrics <- confusion_metrics(y, y_pred)
+
+# Print confusion matrix metrics
+print(metrics)
