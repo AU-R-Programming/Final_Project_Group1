@@ -1,0 +1,20 @@
+Package: Optimization
+Type: Package
+Title: Implementing Supervised Binary Classification Using Numerical Optimization
+Version: 0.1.0
+Author: Authors@R: c(
+    person("Yuchen", "Wang", email = "yzw0174@auburn.edu", role = c("aut","cre")),
+    person("Sarah", "Batten", role = "aut"),
+    person("FNU", "Kirti", role = "aut"),
+    )
+Maintainer: Yuchen Wang <yzw0174@auburn.edu>
+Description: This package provides tools for supervised binary classification using numerical optimization. 
+    The package includes functions for estimating the coefficient vector (β), initializing values for optimization,
+    generating bootstrap confidence intervals, and computing confusion matrix metrics (e.g., accuracy, sensitivity, specificity).
+    Additionally, it outputs diagnostic metrics such as the False Discovery Rate and Diagnostic Odds Ratio. 
+    Detailed documentation is included for all implemented functions.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
