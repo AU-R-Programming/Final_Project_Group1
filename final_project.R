@@ -28,37 +28,25 @@ estimate_beta <- function(X, y, beta_init) {
 
 # putting above functions together
 opt_beta_est <- function(X, y){
+  X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
-  result <- estimate_beta(X = X, y = y, beta_init = beta_initial)
-  cat("Estimated beta:", result$par, "\n")
-  return(result$par)
+  beta_opt <- estimate_beta(X = X, y = y, beta_init = beta_initial)
+  cat("Estimated beta:", beta_opt$par, "\n")
+  return(beta_opt$par)
 }
 
-# simulating data for function
-simulate_data <- function(n, p, true_beta) {
-  set.seed(123)  # For reproducibility
-
-  # Generate random predictor matrix X (standard normal distribution)
-  X <- matrix(rnorm(n * p), nrow = n, ncol = p)
-
-  # Calculate p_i
-  p_i <- 1 / (1 + exp(-X %*% true_beta)) # probability for y generation
-
-  # Generate binary response variable y
-  y <- rbinom(n, size = 1, prob = p_i)
-
-  list(X = X, y = y)
-}
 
 # testing code
-set.seed(42)  # For reproducibility
-n <- 100   # Number of observations
-p <- 3     # Number of predictors
-beta_true <- c(0.5, -1, 0.75)  # True coefficients
+set.seed(42)  # for reproducibility
+n <- 100   # number of observations
+p <- 3     # number of predictors
+beta_true <- c(1.25, 0.5, -1, 0.75)  # true coefficients
 
-data <- simulate_data(n, p, beta_true)
-X <- data$X
-y <- data$y
+X <- matrix(rnorm(n * p), nrow = n, ncol = p)   # predictor matrix
+design <- cbind(1, X)                           # add intercept column
+p_i <- 1 / (1 + exp(-design %*% beta_true))     # probabilities
+y <- rbinom(n, size = 1, prob = p_i)            # response variable
+
 
 # calculate initial beta
 beta_init <- initial_beta(X, y)
@@ -66,13 +54,12 @@ beta_init <- initial_beta(X, y)
 # estimate beta using optimization
 result <- estimate_beta(X, y, beta_init)
 
-# display results compared to true values
-cat("True beta:", beta_true, "\n")
-cat("Estimated beta:", result$par, "\n")
-
 # testing final function
 beta_opt <- opt_beta_est(X = X, y = y)
 
+# display results compared to true values
+cat("True beta:", beta_true, "\n")
+cat("Estimated beta:", beta_opt, "\n")
 
 # Task 2: Bootstrapping Confidence Intervals
 
