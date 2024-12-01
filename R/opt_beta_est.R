@@ -1,3 +1,4 @@
+
 #Task 1:
 
 
@@ -25,7 +26,30 @@ estimate_beta <- function(X, y, beta_init) {
 }
 
 # putting above functions together
+
+#' Beta optimization function
+#'
+#' This function calculates the optimal values for the parameter beta when provided with a matrix of data called X, and
+#' the the corresponding y binary response vector. When these values are input, the function will find an initial beta
+#' beta estimate, then uses an optimization function to refine the beta estimates until they are sufficiently near
+#' the true values of beta.
+#'
+#' @param X This is a matrix of data with dimensions n x p.
+#' @param y This is a vector with a length of n.
+#' @return This function will return an estimate of the parameter beta, along with an intercept.
+#' @export
+#' @examples
+#' n <- 100
+#' p <- 3
+#' X <- matrix(rnorm(n * p), nrow = n, ncol = p)
+#' design <- cbind(1, X)
+#' p_i <- 1 / (1 + exp(-design %*% beta_true))
+#' y <- rbinom(n, size = 1, prob = p_i)
+#' beta_opt <- opt_beta_est(X = X, y = y)
+#' print(beta_opt)
+
 opt_beta_est <- function(X, y){
+  n <- nrow(X)  # calculate the number of rows in X
   X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
   beta_opt <- estimate_beta(X = X, y = y, beta_init = beta_initial)

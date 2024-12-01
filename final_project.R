@@ -27,6 +27,7 @@ estimate_beta <- function(X, y, beta_init) {
 }
 
 # putting above functions together
+
 opt_beta_est <- function(X, y){
   X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
