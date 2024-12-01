@@ -1,7 +1,30 @@
-#Task 3:
+#' @title Compute Confusion Matrix Metrics
+#'
+#' @description
+#' This function calculates various evaluation metrics from a confusion matrix
+#' for a binary classification model, including accuracy, sensitivity, specificity,
+#' false discovery rate, and diagnostic odds ratio.
+#'
+#' @param y_true A numeric vector containing the true class labels (binary: 0 or 1).
+#' @param y_pred A numeric vector containing the predicted class labels (binary: 0 or 1).
+#'
+#' @return A list containing the following metrics:
+#' \describe{
+#'   \item{prevalence}{Proportion of positive cases in the data.}
+#'   \item{accuracy}{Overall accuracy of the classification model.}
+#'   \item{sensitivity}{Proportion of true positives identified correctly.}
+#'   \item{specificity}{Proportion of true negatives identified correctly.}
+#'   \item{FDR}{False Discovery Rate: Proportion of predicted positives that are false.}
+#'   \item{DOR}{Diagnostic Odds Ratio: Ratio of the odds of positive prediction for true positives compared to false negatives.}
+#' }
+#' @author Yuchen Wang
+#' @export
+#' @examples
+#' y_true <- c(1, 0, 1, 1, 0, 1, 0, 0, 1, 0)
+#' y_pred <- c(1, 0, 1, 1, 0, 1, 1, 0, 1, 0)
+#' metrics <- confusion_metrics(y_true, y_pred)
+#' print(metrics)
 
-
-# Confusion matrix metrics
 confusion_metrics <- function(y_true, y_pred) {
   TP <- sum(y_true == 1 & y_pred == 1)
   TN <- sum(y_true == 0 & y_pred == 0)
@@ -15,19 +38,15 @@ confusion_metrics <- function(y_true, y_pred) {
   FDR <- FP / (FP + TP)
   DOR <- (TP / FN) / (FP / TN)
 
-  return(list(prevalence = prevalence, accuracy = accuracy, sensitivity = sensitivity,
-              specificity = specificity, FDR = FDR, DOR = DOR))
+  return(list(
+    prevalence = prevalence,
+    accuracy = accuracy,
+    sensitivity = sensitivity,
+    specificity = specificity,
+    FDR = FDR,
+    DOR = DOR
+  ))
 }
 
-# Predict probabilities and calculate metrics
-X_design <- cbind(1, X)  # add intercept column
-p_hat <- 1 / (1 + exp(-X_design %*% beta_opt))  # use design matrix with intercept
-y_pred <- ifelse(p_hat > 0.5, 1, 0)  # classify predictions
-
-# Calculate metrics
-metrics <- confusion_metrics(y, y_pred)
-
-# Print confusion matrix metrics
-print(metrics)
 
 
