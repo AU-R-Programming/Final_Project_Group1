@@ -1,5 +1,5 @@
 ---
-title: "Optimization"
+title: "Optimization Vignette"
 output: html_document
 date: "2024-12-02"
 ---
@@ -8,4 +8,70 @@ date: "2024-12-02"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##This is the file for explaining our package called "optimization", we will use expense.csv dataset.
+The `optimization` package is developed based on implementing supervised binary classification using numerical optimization. The package contains functions that estimate the coefficient vector $\beta$, which includes the independent variables/predictors along with the intercept. The package then allows the user to obtain different outputs from the procedure. The estimator is computed using numerical optimization of the following: 
+
+$$
+\hat{\beta} = \arg\min_{\beta} \sum_{i=1}^{n} \left(-y_i \cdot \ln(p_i) - (1 - y_i) \cdot \ln(1 - p_i)\right),
+$$
+where
+$$
+p_i = \frac{1}{1 + \exp(-x_i^\top \beta)},
+$$
+and $y_i$ and $x_i$ represent the $i^{th}$ observation and row of the response and predictors respectively. 
+
+The basic requirements/outputs of the procedure are as follows: 
+
+- The initial values of $\beta$ for the optimization procedure are found using the least-squares formula: $(X^T X)^{-1} X^T y$.
+- The user is able to choose the significance level $\alpha$ for obtaining the $1 - \alpha$ confidence intervals for $\beta$ using the Bootstrap method, along with the number of bootstraps. The default number of bootstraps will be 20. 
+- The confusion matrix will be obtained using a cut-off value for prediction at 0.5, with the following metrics to be returned based on the cut-off value: 
+  - Prevalence
+  - Accuracy
+  - Sensitivity
+  - Specificity
+  - False Discovery Rate
+  - Diagnostic Odds Ration
+- Help documentation for all functions is available. 
+
+To show examples of how to utilize this package, the expense.csv dataset will be used. 
+
+## Data Pre-Processing
+
+The dataset that will be used for this example is the expense.csv file from the STAT6210 class Canvas page. The following commands allow us to understand the dataset we are working with.
+
+```{r}
+head(expenses)
+n <- nrow(expenses)
+p <- ncol(expenses)
+```
+
+Since this dataset has character vectors, we need to convert these vectors to numeric using their factors. 
+
+```{r}
+expenses[] <- lapply(expenses, function(col) {
+  if (is.character(col)) {
+    as.numeric(factor(col))
+  } else {
+    col
+  }
+})
+```
+
+
+## Installing the optimization package
+
+The package is available for downloading from a GitHub repository within the AU-R-Programming organization. 
+
+```{r}
+install_github()
+```
+
+## Using the optimization package
+The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset. The response variable for this dataset is the `charges` column. 
+
+```{r}
+opt_beta_est(X = expenses[, 1:6], y = expenses$charges)
+```
+
+
+
+
