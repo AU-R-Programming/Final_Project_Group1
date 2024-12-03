@@ -12,7 +12,7 @@ bootstrap_ci <- function(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20) {
     y_boot <- y[sample_indices]                             # Bootstrap response
 
     # Estimate beta for the bootstrap sample using the provided beta optimization function
-    bootstrap_betas[i, ] <- beta_opt_func(X_boot, y_boot)   # Store the estimated beta
+    bootstrap_betas[i, ] <- opt_beta_est(X_boot, y_boot)   # Store the estimated beta
   }
 
   # Compute confidence intervals

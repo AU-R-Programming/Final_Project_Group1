@@ -9,15 +9,24 @@ initial_beta <- function(X, y) {
 
 
 # loss function function
+# loss_func <- function(beta, X, y) {
+#   p <- 1 / (1 + exp(-X %*% beta))
+#   sum(-y * log(p) - (1 - y) * log(1 - p))
+# }
+
+
+
+# test loss
 loss_func <- function(beta, X, y) {
   p <- 1 / (1 + exp(-X %*% beta))
+  p <- pmin(pmax(p, 1e-15), 1 - 1e-15)  # Clip probabilities
   sum(-y * log(p) - (1 - y) * log(1 - p))
 }
 
 # beta optimization function
-estimate_beta <- function(X, y, beta_init) {
+estimate_beta <- function(X, y, beta_initial) {
   optim(
-    par = beta_init,
+    par = beta_initial,
     fn = loss_func,
     X = X,
     y = y,
@@ -49,10 +58,10 @@ estimate_beta <- function(X, y, beta_init) {
 #' print(beta_opt)
 
 opt_beta_est <- function(X, y){
-  n <- nrow(X)  # calculate the number of rows in X
-  X <- cbind(rep(1, n), X) # adding intercept
+  #n <- nrow(X)  # calculate the number of rows in X
+  #X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
-  beta_opt <- estimate_beta(X = X, y = y, beta_init = beta_initial)
+  beta_opt <- estimate_beta(X = X, y = y, beta_initial = as.vector(beta_initial))
   cat("Estimated beta:", beta_opt$par, "\n")
   return(beta_opt$par)
 }

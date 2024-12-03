@@ -44,16 +44,14 @@ n <- nrow(expenses)
 p <- ncol(expenses)
 ```
 
-Since this dataset has character vectors, we need to convert these vectors to numeric using their factors. 
+Since this dataset has character vectors, we need to convert these vectors to numeric using the function model.matrix. 
+
 
 ```{r}
-expenses[] <- lapply(expenses, function(col) {
-  if (is.character(col)) {
-    as.numeric(factor(col))
-  } else {
-    col
-  }
-})
+expenses[] <- lapply(expenses, function(x) if (is.character(x)) as.factor(x) else x)
+formula <- ~ . # this specifies how to model the data, tells it to include all the columns
+design_matrix <- model.matrix(formula, data = expenses)
+head(design_matrix)
 ```
 
 
@@ -66,12 +64,39 @@ install_github()
 ```
 
 ## Using the optimization package
-The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset. The response variable for this dataset is the `charges` column. 
+The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset. The response variable for this dataset is the `sex` column. 
 
 ```{r}
-opt_beta_est(X = expenses[, 1:6], y = expenses$charges)
+opt_beta_est(X = design_matrix[, -3], y = design_matrix[, 3])
+```
+This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. ADD WHAT THIS MEANS. 
+
+Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
+
+```{r}
+bootstrap_ci(
+  X = design_matrix[, -3],
+  y = design_matrix[, 3],
+  beta_opt_func = opt_beta_est(
+    X = design_matrix[, -3],
+    y = design_matrix[, 3]
+  ),
+  alpha = 0.05,
+  n_bootstrap = 20
+)
+```
+GIVE EXPLANATION OF THIS.
+
+
+The last function that is included in this `optimization` function creates a confusion matrix. Based on a cut-off value for prediction at 0.5. 
+
+```{r}
+confusion_metrics(y_true = design_matrix[, 3], y_pred = )
 ```
 
 
 
 
+
+References 
+Help in creating design matrix: https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6
