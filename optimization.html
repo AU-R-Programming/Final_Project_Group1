@@ -355,7 +355,7 @@ display: none;
 </div>
 
 
-<p>The <code>optimization</code> package is developed based on
+<p>The <code>Optimization</code> package is developed based on
 implementing supervised binary classification using numerical
 optimization. The package contains functions that estimate the
 coefficient vector <span class="math inline">\(\beta\)</span>, which
@@ -391,9 +391,158 @@ the cut-off value:
 </ul></li>
 <li>Help documentation for all functions is available.</li>
 </ul>
-<div id="this-is-the-file-for-explaining-our-package-called-optimization-we-will-use-expense.csv-dataset." class="section level2">
-<h2>This is the file for explaining our package called “optimization”,
-we will use expense.csv dataset.</h2>
+<p>To show examples of how to utilize this package, the expense.csv
+dataset will be used.</p>
+<div id="data-pre-processing" class="section level2">
+<h2>Data Pre-Processing</h2>
+<p>The dataset that will be used for this example is the expense.csv
+file from the STAT6210 class Canvas page. The following commands allow
+us to understand the dataset we are working with.</p>
+<pre class="r"><code>expenses &lt;- read.csv(&quot;expenses.csv&quot;)
+head(expenses)</code></pre>
+<pre><code>##   age    sex    bmi children smoker    region   charges
+## 1  19 female 27.900        0    yes southwest 16884.924
+## 2  18   male 33.770        1     no southeast  1725.552
+## 3  28   male 33.000        3     no southeast  4449.462
+## 4  33   male 22.705        0     no northwest 21984.471
+## 5  32   male 28.880        0     no northwest  3866.855
+## 6  31 female 25.740        0     no southeast  3756.622</code></pre>
+<pre class="r"><code>n &lt;- nrow(expenses)
+p &lt;- ncol(expenses)</code></pre>
+<p>Since this dataset has character vectors, we need to convert these
+vectors to numeric using the function model.matrix.</p>
+<pre class="r"><code>expenses[] &lt;- lapply(expenses, function(x) if (is.character(x)) as.factor(x) else x)
+formula &lt;- ~ . # this specifies how to model the data, tells it to include all the columns
+design_matrix &lt;- model.matrix(formula, data = expenses)
+head(design_matrix)</code></pre>
+<pre><code>##   (Intercept) age sexmale    bmi children smokeryes regionnorthwest
+## 1           1  19       0 27.900        0         1               0
+## 2           1  18       1 33.770        1         0               0
+## 3           1  28       1 33.000        3         0               0
+## 4           1  33       1 22.705        0         0               1
+## 5           1  32       1 28.880        0         0               1
+## 6           1  31       0 25.740        0         0               0
+##   regionsoutheast regionsouthwest   charges
+## 1               0               1 16884.924
+## 2               1               0  1725.552
+## 3               1               0  4449.462
+## 4               0               0 21984.471
+## 5               0               0  3866.855
+## 6               1               0  3756.622</code></pre>
+<pre class="r"><code>dim(design_matrix)</code></pre>
+<pre><code>## [1] 1338   10</code></pre>
+</div>
+<div id="installing-the-optimization-package" class="section level2">
+<h2>Installing the optimization package</h2>
+<p>The package is available for downloading from a GitHub repository
+within the AU-R-Programming organization.</p>
+<pre class="r"><code>library(devtools)
+install_github(&quot;AU-R-Programming/Final_Project_Group1&quot;)</code></pre>
+</div>
+<div id="using-the-optimization-package" class="section level2">
+<h2>Using the Optimization package</h2>
+</div>
+<div id="opt_beta_est" class="section level2">
+<h2>opt_beta_est</h2>
+<p>The opt_beta_est function can be used to estimate the vector <span class="math inline">\(\beta\)</span> for our dataset. The response
+variable for this dataset is the <code>sex</code> column.</p>
+<pre class="r"><code>library(Optimization)
+X &lt;- design_matrix[, -3]
+y &lt;- design_matrix[, 3]
+dim(X)</code></pre>
+<pre><code>## [1] 1338    9</code></pre>
+<pre class="r"><code>length(y)</code></pre>
+<pre><code>## [1] 1338</code></pre>
+<pre class="r"><code>beta_opt_func &lt;- opt_beta_est(X, y)</code></pre>
+<pre><code>## Estimated beta: 0.383264 -0.00066372 0.004328928 0.007536227 0.1144097 -0.00626743 -0.005962597 -0.006005396 -8.91231e-07</code></pre>
+<pre class="r"><code>print(beta_opt_func)</code></pre>
+<pre><code>## [1]  3.832640e-01 -6.637200e-04  4.328928e-03  7.536227e-03  1.144097e-01
+## [6] -6.267430e-03 -5.962597e-03 -6.005396e-03 -8.912310e-07</code></pre>
+<pre class="r"><code>dim(beta_opt_func)</code></pre>
+<pre><code>## NULL</code></pre>
+<p>This function returns the optimal estimated <span class="math inline">\(\beta\)</span> values for this dataset, where the
+response element is the sex of the patient. ADD WHAT THIS MEANS.</p>
+</div>
+<div id="bootstrap_ci" class="section level2">
+<h2>bootstrap_ci</h2>
+<p>Another function within this optimization package is the
+<code>bootstrap_ci</code> function. This function uses the bootstrap
+method to create confidence intervals at the specified confidence level,
+<span class="math inline">\(\alpha\)</span>. The number of times the
+bootstrap procedure is repeated can be specified by the user, with the
+default being 20.</p>
+<pre class="r"><code>bootstrap_ci(X, y, beta_opt_func, alpha = 0.05,n_bootstrap = 20)</code></pre>
+<pre><code>## Estimated beta: 0.4000442 0.0004023235 0.002462784 0.009570082 0.1637598 -0.00612741 0.04984582 -0.009024575 -3.053441e-06 
+## Estimated beta: 0.3387002 -0.000376202 0.003881395 -0.002138448 0.05362228 0.04206219 -0.004915765 0.04658996 1.699415e-06 
+## Estimated beta: 0.3771804 -0.001782699 0.004768845 0.01696552 0.08498167 0.003552729 -0.005291458 -0.001415121 5.058819e-07 
+## Estimated beta: 0.47152 0.0001703936 0.0002236177 0.01271648 0.1319828 -0.04488339 0.0619425 -0.0429469 -2.742718e-07 
+## Estimated beta: 0.5194119 -0.0005913034 0.0002536036 0.00364204 -0.004850609 -0.03017357 -0.06255836 -0.04861067 -2.439078e-05 
+## Estimated beta: 0.3830497 -0.001317074 0.00734692 0.01376554 0.1681762 -0.05627436 -0.0604569 -0.1001565 -1.412222e-06 
+## Estimated beta: 0.4474033 -0.0013904 0.002416074 0.01037378 0.04158399 -0.0007515434 -0.02738808 0.01276907 2.12875e-06 
+## Estimated beta: 0.3793905 -0.0006643608 0.003150433 0.01051056 0.1836313 0.01974961 0.05111612 0.04797865 -1.590945e-06 
+## Estimated beta: 0.4520831 -0.0004403085 0.002210226 -0.008805282 0.002654353 -0.02770453 0.009963768 -0.07127645 2.209945e-06 
+## Estimated beta: 0.4104678 -0.001239576 0.003716128 -0.0006784914 0.02573127 0.002342621 0.0299145 0.03480077 8.443179e-07 
+## Estimated beta: 0.3469472 -0.0002652729 0.003638174 0.01380373 0.02454264 0.004188008 -0.01968689 -0.02710662 3.216294e-06 
+## Estimated beta: 0.4186269 -0.001232754 0.003763659 -0.003845781 0.1657187 0.06409892 0.03021872 0.03626773 -2.705109e-06 
+## Estimated beta: 0.4375007 -0.001399107 0.002234538 -0.002978256 0.05940261 0.01941827 0.01359708 -0.01833038 2.453391e-06 
+## Estimated beta: 0.4269717 -0.0004024399 0.003462781 0.02481231 0.1241512 -0.08648768 -0.03025982 -0.05490978 -2.510003e-05 
+## Estimated beta: 0.2951029 -0.0005433055 0.007291364 0.02128076 0.1677817 -0.03086545 -0.05202858 -0.02195127 -2.376579e-06 
+## Estimated beta: 0.286373 -0.001471635 0.00783389 0.01792573 0.0607635 -0.01790887 -0.04133516 -0.03711041 1.385309e-06 
+## Estimated beta: 0.2173288 0.003551589 0.007139782 -0.01156304 0.124911 0.0004031997 -0.0780016 -0.02793282 -2.763279e-06 
+## Estimated beta: 0.1907838 0.001314892 0.009066888 0.0011784 0.2384998 0.02782762 0.04711427 -0.01528343 -2.250032e-05 
+## Estimated beta: 0.3910572 -0.0005821296 0.003339982 0.001468357 0.1267392 -0.02868903 -0.03427015 -0.03435575 -1.894536e-05 
+## Estimated beta: 0.3813836 -0.0001943774 0.003446202 0.006938149 0.1026591 0.05516908 0.03605856 0.03607153 -1.886137e-06</code></pre>
+<pre><code>##   Coefficient      Lower_CI     Upper_CI
+## 1           1  2.033927e-01 4.966633e-01
+## 2           2 -1.634943e-03 2.489158e-03
+## 3           3  2.378610e-04 8.481214e-03
+## 4           4 -1.025311e-02 2.313482e-02
+## 5           5 -1.285752e-03 2.124372e-01
+## 6           6 -7.213635e-02 5.985725e-02
+## 7           7 -7.066606e-02 5.679997e-02
+## 8           8 -8.643848e-02 4.731902e-02
+## 9           9 -2.476314e-05 2.853915e-06</code></pre>
+<p>GIVE EXPLANATION OF THIS.</p>
+</div>
+<div id="confusion_metrics" class="section level2">
+<h2>confusion_metrics</h2>
+<p>The last function that is included in this <code>optimization</code>
+function creates a confusion matrix. Based on a cut-off value for
+prediction at 0.5.</p>
+<pre class="r"><code># Predict probabilities and calculate metrics
+
+p_hat &lt;- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept
+y_pred &lt;- ifelse(p_hat &gt; 0.5, 1, 0)  # classify predictions
+
+# Calculate metrics
+metrics &lt;- confusion_metrics(y, y_pred)
+
+# Print confusion matrix metrics
+print(metrics)</code></pre>
+<pre><code>## $prevalence
+## [1] 0.5052317
+## 
+## $accuracy
+## [1] 0.5052317
+## 
+## $sensitivity
+## [1] 1
+## 
+## $specificity
+## [1] 0
+## 
+## $FDR
+## [1] 0.4947683
+## 
+## $DOR
+## [1] NaN</code></pre>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Help in creating design matrix:</p>
+<p><a href="https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6" class="uri">https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6</a></p>
+<p><a href="https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7" class="uri">https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7</a></p>
+<p><a href="https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5" class="uri">https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5</a></p>
 </div>
 
 

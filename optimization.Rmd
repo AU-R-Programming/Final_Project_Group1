@@ -8,7 +8,7 @@ date: "2024-12-02"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The `optimization` package is developed based on implementing supervised binary classification using numerical optimization. The package contains functions that estimate the coefficient vector $\beta$, which includes the independent variables/predictors along with the intercept. The package then allows the user to obtain different outputs from the procedure. The estimator is computed using numerical optimization of the following: 
+The `Optimization` package is developed based on implementing supervised binary classification using numerical optimization. The package contains functions that estimate the coefficient vector $\beta$, which includes the independent variables/predictors along with the intercept. The package then allows the user to obtain different outputs from the procedure. The estimator is computed using numerical optimization of the following: 
 
 $$
 \hat{\beta} = \arg\min_{\beta} \sum_{i=1}^{n} \left(-y_i \cdot \ln(p_i) - (1 - y_i) \cdot \ln(1 - p_i)\right),
@@ -39,6 +39,7 @@ To show examples of how to utilize this package, the expense.csv dataset will be
 The dataset that will be used for this example is the expense.csv file from the STAT6210 class Canvas page. The following commands allow us to understand the dataset we are working with.
 
 ```{r}
+expenses <- read.csv("expenses.csv")
 head(expenses)
 n <- nrow(expenses)
 p <- ncol(expenses)
@@ -52,6 +53,7 @@ expenses[] <- lapply(expenses, function(x) if (is.character(x)) as.factor(x) els
 formula <- ~ . # this specifies how to model the data, tells it to include all the columns
 design_matrix <- model.matrix(formula, data = expenses)
 head(design_matrix)
+dim(design_matrix)
 ```
 
 
@@ -59,44 +61,67 @@ head(design_matrix)
 
 The package is available for downloading from a GitHub repository within the AU-R-Programming organization. 
 
-```{r}
-install_github()
+```{r, message=FALSE,warning=FALSE}
+library(devtools)
+install_github("AU-R-Programming/Final_Project_Group1")
+
 ```
 
-## Using the optimization package
+## Using the Optimization package
+
+## opt_beta_est
+
 The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset. The response variable for this dataset is the `sex` column. 
 
-```{r}
-opt_beta_est(X = design_matrix[, -3], y = design_matrix[, 3])
+```{r,message=FALSE}
+library(Optimization)
+X <- design_matrix[, -3]
+y <- design_matrix[, 3]
+dim(X)
+length(y)
+beta_opt_func <- opt_beta_est(X, y)
+print(beta_opt_func)
+dim(beta_opt_func)
 ```
 This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. ADD WHAT THIS MEANS. 
+
+
+## bootstrap_ci
 
 Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
 
 ```{r}
-bootstrap_ci(
-  X = design_matrix[, -3],
-  y = design_matrix[, 3],
-  beta_opt_func = opt_beta_est(
-    X = design_matrix[, -3],
-    y = design_matrix[, 3]
-  ),
-  alpha = 0.05,
-  n_bootstrap = 20
-)
+bootstrap_ci(X, y, beta_opt_func, alpha = 0.05,n_bootstrap = 20)
 ```
 GIVE EXPLANATION OF THIS.
 
 
+## confusion_metrics
+
 The last function that is included in this `optimization` function creates a confusion matrix. Based on a cut-off value for prediction at 0.5. 
 
 ```{r}
-confusion_metrics(y_true = design_matrix[, 3], y_pred = )
+# Predict probabilities and calculate metrics
+
+p_hat <- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept
+y_pred <- ifelse(p_hat > 0.5, 1, 0)  # classify predictions
+
+# Calculate metrics
+metrics <- confusion_metrics(y, y_pred)
+
+# Print confusion matrix metrics
+print(metrics)
 ```
 
 
 
 
 
-References 
-Help in creating design matrix: https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6
+## References 
+Help in creating design matrix: 
+
+https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6
+
+https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7
+
+https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5
