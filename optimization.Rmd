@@ -106,13 +106,12 @@ The last function that is included in this `optimization` function creates a con
 y_pred <- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept  
 
 # Calculate metrics
-metrics <- confusion_metrics(y, y_pred)
+metrics <- confusion_metrics(y, y_pred, cutoff = 0.5)
 
 # Print confusion matrix metrics
 print(metrics)
 ```
-
-
+The `confusion_metrics` function calculates various performance metrics for a binary classification model based on the true labels (\( y_{\text{true}} \)) and predicted probabilities (\( y_{\text{pred}} \)). Using a specified cutoff (default is 0.5), it converts probabilities into binary predictions and computes key metrics, including true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). From these, it derives metrics such as prevalence (proportion of positives in the data), accuracy, sensitivity (true positive rate), specificity (true negative rate), false discovery rate (FDR), and diagnostic odds ratio (DOR). The function returns these metrics as a list for model evaluation.
 
 
 
