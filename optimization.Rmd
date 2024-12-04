@@ -103,8 +103,7 @@ The last function that is included in this `optimization` function creates a con
 ```{r}
 # Predict probabilities and calculate metrics
 
-p_hat <- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept
-y_pred <- ifelse(p_hat > 0.5, 1, 0)  # classify predictions
+y_pred <- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept  
 
 # Calculate metrics
 metrics <- confusion_metrics(y, y_pred)

@@ -4,12 +4,14 @@
 \alias{confusion_metrics}
 \title{Compute Confusion Matrix Metrics}
 \usage{
-confusion_metrics(y_true, y_pred)
+confusion_metrics(y_true, y_pred, cutoff = 0.5)
 }
 \arguments{
 \item{y_true}{A numeric vector containing the true class labels (binary: 0 or 1).}
 
 \item{y_pred}{A numeric vector containing the predicted class labels (binary: 0 or 1).}
+
+\item{cutoff}{Cut-off value for classification (default = 0.5).}
 }
 \value{
 A list containing the following metrics:

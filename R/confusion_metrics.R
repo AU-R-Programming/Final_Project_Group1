@@ -7,6 +7,7 @@
 #'
 #' @param y_true A numeric vector containing the true class labels (binary: 0 or 1).
 #' @param y_pred A numeric vector containing the predicted class labels (binary: 0 or 1).
+#' @param cutoff Cut-off value for classification (default = 0.5).
 #'
 #' @return A list containing the following metrics:
 #' \describe{
@@ -25,11 +26,12 @@
 #' metrics <- confusion_metrics(y_true, y_pred)
 #' print(metrics)
 
-confusion_metrics <- function(y_true, y_pred) {
-  TP <- sum(y_true == 1 & y_pred == 1)
-  TN <- sum(y_true == 0 & y_pred == 0)
-  FP <- sum(y_true == 0 & y_pred == 1)
-  FN <- sum(y_true == 1 & y_pred == 0)
+confusion_metrics <- function(y_true, y_pred, cutoff = 0.5) {
+  y_pred_1 <- ifelse(y_pred > cutoff, 1, 0)
+  TP <- sum(y_true == 1 & y_pred_1 == 1)
+  TN <- sum(y_true == 0 & y_pred_1 == 0)
+  FP <- sum(y_true == 0 & y_pred_1 == 1)
+  FN <- sum(y_true == 1 & y_pred_1 == 0)
 
   prevalence <- mean(y_true)
   accuracy <- (TP + TN) / length(y_true)
