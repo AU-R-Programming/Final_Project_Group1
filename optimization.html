@@ -370,7 +370,7 @@ following:</p>
 p_i = \frac{1}{1 + \exp(-x_i^\top \beta)},
 \]</span> and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> represent the <span class="math inline">\(i^{th}\)</span> observation and row of the
 response and predictors respectively.</p>
-<p>The basic requirements/outputs of the procedure are as follows:</p>
+<p>The basic outputs of the procedure are as follows:</p>
 <ul>
 <li>The initial values of <span class="math inline">\(\beta\)</span> for
 the optimization procedure are found using the least-squares formula:
@@ -410,7 +410,8 @@ head(expenses)</code></pre>
 <pre class="r"><code>n &lt;- nrow(expenses)
 p &lt;- ncol(expenses)</code></pre>
 <p>Since this dataset has character vectors, we need to convert these
-vectors to numeric using the function model.matrix.</p>
+vectors to numeric using the function model.matrix. This function also
+creates a column of ones for the intercept.</p>
 <pre class="r"><code>expenses[] &lt;- lapply(expenses, function(x) if (is.character(x)) as.factor(x) else x)
 formula &lt;- ~ . # this specifies how to model the data, tells it to include all the columns
 design_matrix &lt;- model.matrix(formula, data = expenses)
@@ -435,9 +436,19 @@ head(design_matrix)</code></pre>
 <div id="installing-the-optimization-package" class="section level2">
 <h2>Installing the optimization package</h2>
 <p>The package is available for downloading from a GitHub repository
-within the AU-R-Programming organization.</p>
+named Final_Project_Group1 within the AU-R-Programming organization.</p>
 <pre class="r"><code>library(devtools)
 install_github(&quot;AU-R-Programming/Final_Project_Group1&quot;)</code></pre>
+<pre><code>## ── R CMD build ─────────────────────────────────────────────────────────────────
+##          checking for file &#39;C:\Users\sarah\AppData\Local\Temp\RtmpIFifVV\remotes546c7fde59fd\AU-R-Programming-Final_Project_Group1-1ca9429/DESCRIPTION&#39; ...     checking for file &#39;C:\Users\sarah\AppData\Local\Temp\RtmpIFifVV\remotes546c7fde59fd\AU-R-Programming-Final_Project_Group1-1ca9429/DESCRIPTION&#39; ...   ✔  checking for file &#39;C:\Users\sarah\AppData\Local\Temp\RtmpIFifVV\remotes546c7fde59fd\AU-R-Programming-Final_Project_Group1-1ca9429/DESCRIPTION&#39;
+##       ─  preparing &#39;Optimization&#39;:
+##    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+##       ─  checking for LF line-endings in source and make files and shell scripts
+##   ─  checking for empty or unneeded directories
+##    Omitted &#39;LazyData&#39; from DESCRIPTION
+##   ─  building &#39;Optimization_0.1.0.tar.gz&#39;
+##      
+## </code></pre>
 </div>
 <div id="using-the-optimization-package" class="section level2">
 <h2>Using the Optimization package</h2>
@@ -458,8 +469,8 @@ dim(X)</code></pre>
 <pre class="r"><code>print(beta_opt_func)</code></pre>
 <pre><code>## [1]  3.832640e-01 -6.637200e-04  4.328928e-03  7.536227e-03  1.144097e-01
 ## [6] -6.267430e-03 -5.962597e-03 -6.005396e-03 -8.912310e-07</code></pre>
-<pre class="r"><code>dim(beta_opt_func)</code></pre>
-<pre><code>## NULL</code></pre>
+<pre class="r"><code>length(beta_opt_func)</code></pre>
+<pre><code>## [1] 9</code></pre>
 <p>This function returns the optimal estimated <span class="math inline">\(\beta\)</span> values for this dataset, where the
 response element is the sex of the patient. ADD WHAT THIS MEANS.</p>
 </div>
@@ -472,36 +483,36 @@ method to create confidence intervals at the specified confidence level,
 bootstrap procedure is repeated can be specified by the user, with the
 default being 20.</p>
 <pre class="r"><code>bootstrap_ci(X, y, beta_opt_func, alpha = 0.05,n_bootstrap = 20)</code></pre>
-<pre><code>## Estimated beta: 0.4000442 0.0004023235 0.002462784 0.009570082 0.1637598 -0.00612741 0.04984582 -0.009024575 -3.053441e-06 
-## Estimated beta: 0.3387002 -0.000376202 0.003881395 -0.002138448 0.05362228 0.04206219 -0.004915765 0.04658996 1.699415e-06 
-## Estimated beta: 0.3771804 -0.001782699 0.004768845 0.01696552 0.08498167 0.003552729 -0.005291458 -0.001415121 5.058819e-07 
-## Estimated beta: 0.47152 0.0001703936 0.0002236177 0.01271648 0.1319828 -0.04488339 0.0619425 -0.0429469 -2.742718e-07 
-## Estimated beta: 0.5194119 -0.0005913034 0.0002536036 0.00364204 -0.004850609 -0.03017357 -0.06255836 -0.04861067 -2.439078e-05 
-## Estimated beta: 0.3830497 -0.001317074 0.00734692 0.01376554 0.1681762 -0.05627436 -0.0604569 -0.1001565 -1.412222e-06 
-## Estimated beta: 0.4474033 -0.0013904 0.002416074 0.01037378 0.04158399 -0.0007515434 -0.02738808 0.01276907 2.12875e-06 
-## Estimated beta: 0.3793905 -0.0006643608 0.003150433 0.01051056 0.1836313 0.01974961 0.05111612 0.04797865 -1.590945e-06 
-## Estimated beta: 0.4520831 -0.0004403085 0.002210226 -0.008805282 0.002654353 -0.02770453 0.009963768 -0.07127645 2.209945e-06 
-## Estimated beta: 0.4104678 -0.001239576 0.003716128 -0.0006784914 0.02573127 0.002342621 0.0299145 0.03480077 8.443179e-07 
-## Estimated beta: 0.3469472 -0.0002652729 0.003638174 0.01380373 0.02454264 0.004188008 -0.01968689 -0.02710662 3.216294e-06 
-## Estimated beta: 0.4186269 -0.001232754 0.003763659 -0.003845781 0.1657187 0.06409892 0.03021872 0.03626773 -2.705109e-06 
-## Estimated beta: 0.4375007 -0.001399107 0.002234538 -0.002978256 0.05940261 0.01941827 0.01359708 -0.01833038 2.453391e-06 
-## Estimated beta: 0.4269717 -0.0004024399 0.003462781 0.02481231 0.1241512 -0.08648768 -0.03025982 -0.05490978 -2.510003e-05 
-## Estimated beta: 0.2951029 -0.0005433055 0.007291364 0.02128076 0.1677817 -0.03086545 -0.05202858 -0.02195127 -2.376579e-06 
-## Estimated beta: 0.286373 -0.001471635 0.00783389 0.01792573 0.0607635 -0.01790887 -0.04133516 -0.03711041 1.385309e-06 
-## Estimated beta: 0.2173288 0.003551589 0.007139782 -0.01156304 0.124911 0.0004031997 -0.0780016 -0.02793282 -2.763279e-06 
-## Estimated beta: 0.1907838 0.001314892 0.009066888 0.0011784 0.2384998 0.02782762 0.04711427 -0.01528343 -2.250032e-05 
-## Estimated beta: 0.3910572 -0.0005821296 0.003339982 0.001468357 0.1267392 -0.02868903 -0.03427015 -0.03435575 -1.894536e-05 
-## Estimated beta: 0.3813836 -0.0001943774 0.003446202 0.006938149 0.1026591 0.05516908 0.03605856 0.03607153 -1.886137e-06</code></pre>
+<pre><code>## Estimated beta: 0.4645245 -0.001473234 0.00196664 0.0001403045 0.1528564 0.104377 0.04863357 0.04883606 -2.391674e-06 
+## Estimated beta: 0.5390163 0.00229981 -0.004616979 0.01382504 0.1171944 -0.02865164 -0.01840712 -0.00895304 -9.038442e-07 
+## Estimated beta: 0.3228616 -1.989669e-05 0.006360757 0.01805334 0.2030143 -0.01893717 0.004153538 -0.02826227 -2.758804e-06 
+## Estimated beta: 0.4760709 -0.001893354 0.005270263 -0.01682533 0.1309197 -0.01911599 0.01279471 -0.01564898 -3.120667e-05 
+## Estimated beta: 0.2219711 0.0003582589 0.007554591 0.01630824 0.07383553 -0.04364633 -0.02099761 0.03237324 1.116771e-06 
+## Estimated beta: 0.2817577 -0.0009871642 0.006766308 0.007853463 -0.01869731 0.04972368 0.02315513 -0.02121416 3.859279e-06 
+## Estimated beta: 0.4218262 3.47824e-05 0.001184998 0.006453159 0.09733461 0.04753993 0.008470969 -0.01333755 -2.360085e-05 
+## Estimated beta: 0.3709756 -0.000575167 0.004385894 0.02330725 0.05176927 -0.02638414 -0.01400892 0.008826004 1.072989e-06 
+## Estimated beta: 0.3358828 -0.0003274203 0.004976202 0.001560332 0.07752089 0.07060587 0.0328409 0.03671804 6.682796e-09 
+## Estimated beta: 0.3280305 -0.001131778 0.006192207 0.005681158 0.2097234 0.03519957 0.05153997 0.1111827 -4.375223e-06 
+## Estimated beta: 0.3696573 0.0004193558 0.002395688 0.007492769 0.169964 0.04713073 0.06967458 0.07853917 -2.147089e-06 
+## Estimated beta: 0.36867 -0.001438385 0.004563561 0.0211166 0.1409955 0.07884339 -0.0459715 -0.02567116 -1.766997e-05 
+## Estimated beta: 0.4248501 -0.001875854 0.003569669 0.02411926 0.1538824 -0.01681541 0.05546598 0.03172287 -1.092636e-05 
+## Estimated beta: 0.3864089 -0.00113619 0.00564372 0.009474993 0.1115057 -0.02197652 -0.04961033 -0.06571665 -7.590252e-07 
+## Estimated beta: 0.4102738 -0.001032026 0.00335732 0.01182758 0.08910491 -0.0406648 -0.01152008 -0.02600495 1.482161e-06 
+## Estimated beta: 0.3067817 0.0002093266 0.005715939 0.0131521 0.2027616 -0.01034071 0.03010084 0.05885989 -3.052836e-06 
+## Estimated beta: 0.3250097 -0.001060705 0.006831261 0.01224671 0.01782654 -0.03096623 -0.04762031 -0.02834135 1.575393e-06 
+## Estimated beta: 0.3787948 5.821358e-05 0.001885219 0.00627998 0.1263052 0.0703457 0.07598075 0.05298128 -4.107163e-07 
+## Estimated beta: 0.2962603 -9.246686e-05 0.007615 -0.003330487 0.1694357 0.02311335 -5.968794e-05 -0.04164477 -2.279334e-06 
+## Estimated beta: 0.3296614 -0.001823122 0.006711759 0.01037267 0.05467357 0.0383039 0.0225612 0.00856612 1.242533e-06</code></pre>
 <pre><code>##   Coefficient      Lower_CI     Upper_CI
-## 1           1  2.033927e-01 4.966633e-01
-## 2           2 -1.634943e-03 2.489158e-03
-## 3           3  2.378610e-04 8.481214e-03
-## 4           4 -1.025311e-02 2.313482e-02
-## 5           5 -1.285752e-03 2.124372e-01
-## 6           6 -7.213635e-02 5.985725e-02
-## 7           7 -7.066606e-02 5.679997e-02
-## 8           8 -8.643848e-02 4.731902e-02
-## 9           9 -2.476314e-05 2.853915e-06</code></pre>
+## 1           1  2.503697e-01 5.091173e-01
+## 2           2 -1.885042e-03 1.406594e-03
+## 3           3 -1.861040e-03 7.586305e-03
+## 4           4 -1.041528e-02 2.373356e-02
+## 5           5 -1.348485e-03 2.065366e-01
+## 6           6 -4.223010e-02 9.224854e-02
+## 7           7 -4.866507e-02 7.298532e-02
+## 8           8 -5.428250e-02 9.567703e-02
+## 9           9 -2.759391e-05 2.774433e-06</code></pre>
 <p>GIVE EXPLANATION OF THIS.</p>
 </div>
 <div id="confusion_metrics" class="section level2">
@@ -511,11 +522,10 @@ function creates a confusion matrix. Based on a cut-off value for
 prediction at 0.5.</p>
 <pre class="r"><code># Predict probabilities and calculate metrics
 
-p_hat &lt;- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept
-y_pred &lt;- ifelse(p_hat &gt; 0.5, 1, 0)  # classify predictions
+y_pred &lt;- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept  
 
 # Calculate metrics
-metrics &lt;- confusion_metrics(y, y_pred)
+metrics &lt;- confusion_metrics(y, y_pred, cutoff = 0.5)
 
 # Print confusion matrix metrics
 print(metrics)</code></pre>
@@ -536,6 +546,18 @@ print(metrics)</code></pre>
 ## 
 ## $DOR
 ## [1] NaN</code></pre>
+<p>The <code>confusion_metrics</code> function calculates various
+performance metrics for a binary classification model based on the true
+labels (<span class="math inline">\(y_{\text{true}}\)</span>) and
+predicted probabilities (<span class="math inline">\(y_{\text{pred}}\)</span>). Using a specified
+cutoff (default is 0.5), it converts probabilities into binary
+predictions and computes key metrics, including true positives (TP),
+true negatives (TN), false positives (FP), and false negatives (FN).
+From these, it derives metrics such as prevalence (proportion of
+positives in the data), accuracy, sensitivity (true positive rate),
+specificity (true negative rate), false discovery rate (FDR), and
+diagnostic odds ratio (DOR). The function returns these metrics as a
+list for model evaluation.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

@@ -23,8 +23,6 @@ the true values of beta.
 \examples{
 n <- 100
 p <- 3
-X <- matrix(rnorm(n * p), nrow = n, ncol = p)
-design <- cbind(1, X)
 p_i <- 1 / (1 + exp(-design \%*\% beta_true))
 y <- rbinom(n, size = 1, prob = p_i)
 beta_opt <- opt_beta_est(X = X, y = y)

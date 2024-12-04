@@ -19,7 +19,7 @@ p_i = \frac{1}{1 + \exp(-x_i^\top \beta)},
 $$
 and $y_i$ and $x_i$ represent the $i^{th}$ observation and row of the response and predictors respectively. 
 
-The basic requirements/outputs of the procedure are as follows: 
+The basic outputs of the procedure are as follows: 
 
 - The initial values of $\beta$ for the optimization procedure are found using the least-squares formula: $(X^T X)^{-1} X^T y$.
 - The user is able to choose the significance level $\alpha$ for obtaining the $1 - \alpha$ confidence intervals for $\beta$ using the Bootstrap method, along with the number of bootstraps. The default number of bootstraps will be 20. 
@@ -45,7 +45,7 @@ n <- nrow(expenses)
 p <- ncol(expenses)
 ```
 
-Since this dataset has character vectors, we need to convert these vectors to numeric using the function model.matrix. 
+Since this dataset has character vectors, we need to convert these vectors to numeric using the function model.matrix. This function also creates a column of ones for the intercept.The functions that are in the package assume that the intercept column is already added, so the user needs to make sure this is true of their dataset. 
 
 
 ```{r}
@@ -68,10 +68,11 @@ install_github("AU-R-Programming/Final_Project_Group1")
 ```
 
 ## Using the Optimization package
+There are three functions included in this package, and their descriptions and examples of how to use them are found below. 
 
-## opt_beta_est
+### opt_beta_est
 
-The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset. The response variable for this dataset is the `sex` column. 
+The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset based on the loss function that is provided above through minimizing the function. The response variable for this dataset is the `sex` column, which is column 3. 
 
 ```{r,message=FALSE}
 library(Optimization)
@@ -83,22 +84,25 @@ beta_opt_func <- opt_beta_est(X, y)
 print(beta_opt_func)
 length(beta_opt_func)
 ```
-This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. ADD WHAT THIS MEANS. 
+This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. 
 
+The first element of $\beta$ corresponds to the intercept term, which represents the baseline log-odds of the outcome when all the predictors are zero. The other elements of $\beta$ are the weights of the predictors, where each coefficient measures the change in the log-odds of the outcome per unit increase in the corresponding predictor, assuming the other predictors are held constant. These coefficients provide a way to quantify the strength and direction of the relationship between each predictor and the log-odds of the outcome. For our example, BMI, children, and smoking are positive, indicating that as these predictors increase, the probability of a positive class increases as well. 
 
-## bootstrap_ci
+This optimized $\beta$ vector provides the intercept and coefficients for the logisitc regression model that makes the model's predicted probabilities, $p_i$, closest to the actual outcome, $y_i$.
+
+### bootstrap_ci
 
 Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
 
 ```{r}
 bootstrap_ci(X, y, beta_opt_func, alpha = 0.05,n_bootstrap = 20)
 ```
-GIVE EXPLANATION OF THIS.
+The output of  this function is the $1 - \alpha$ confidence intervals, giving the upper and lower limits for each element of the $\beta$ vector. For this example, $\alpha = 0.05$, so the output corresponds to the 95% confidence level. 
 
 
-## confusion_metrics
+### confusion_metrics
 
-The last function that is included in this `optimization` function creates a confusion matrix. Based on a cut-off value for prediction at 0.5. 
+The last function that is included in this `Optimization` package creates a confusion matrix. It is based on a cut-off value for prediction, where the default is 0.5.
 
 ```{r}
 # Predict probabilities and calculate metrics
