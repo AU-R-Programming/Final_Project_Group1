@@ -59,7 +59,7 @@ dim(design_matrix)
 
 ## Installing the optimization package
 
-The package is available for downloading from a GitHub repository within the AU-R-Programming organization. 
+The package is available for downloading from a GitHub repository named Final_Project_Group1 within the AU-R-Programming organization. 
 
 ```{r, message=FALSE,warning=FALSE}
 library(devtools)
@@ -81,7 +81,7 @@ dim(X)
 length(y)
 beta_opt_func <- opt_beta_est(X, y)
 print(beta_opt_func)
-dim(beta_opt_func)
+length(beta_opt_func)
 ```
 This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. ADD WHAT THIS MEANS. 
 

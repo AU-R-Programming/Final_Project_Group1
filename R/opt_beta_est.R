@@ -91,3 +91,6 @@ beta_opt <- opt_beta_est(X = X, y = y)
 # display results compared to true values
 cat("True beta:", beta_true, "\n")
 cat("Estimated beta:", beta_opt, "\n")
+
+
+
