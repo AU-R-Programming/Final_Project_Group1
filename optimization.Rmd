@@ -95,7 +95,7 @@ This optimized $\beta$ vector provides the intercept and coefficients for the lo
 Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
 
 ```{r}
-bootstrap_ci(X, y, beta_opt_func, alpha = 0.05,n_bootstrap = 20)
+bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)
 ```
 The output of  this function is the $1 - \alpha$ confidence intervals, giving the upper and lower limits for each element of the $\beta$ vector. For this example, $\alpha = 0.05$, so the output corresponds to the 95% confidence level. 
 

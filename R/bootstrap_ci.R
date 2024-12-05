@@ -1,5 +1,31 @@
 # Task 2: Bootstrapping Confidence Intervals
 
+#' Bootstrap Confidence Intervals
+#'
+#' This function uses the bootstrap method of resampling from the same population/dataset to creat confidence intervals at
+#' the user-specified significance level, alpha. The default significance level is 0.05, and the default number of times the
+#' bootstrap procedure will be repeated is 20.
+#'
+#' @param X This is a matrix of data with dimensions n x p.
+#' @param y This is a binary vector of length n.
+#' @param beta_opt_func This is the loss function, it is the function that will be repeated for the bootstrap procedure.
+#' @param alpha This is the significance level, with a default of 0.05.
+#' @param n_bootstrap This is the number of times this procedure will be repeated, with a default of 20.
+#'
+#' @return This function will return a confidence interval for each element in the vector beta, which is the output of the
+#' beta_opt_func function.
+#' @export
+#'
+#' @examples
+#' n <- 100   # number of observations
+#' p <- 3     # number of predictors
+#' beta_true <- c(1.25, 0.5, -1, 0.75)  # true coefficients
+#' X <- matrix(rnorm(n * p), nrow = n, ncol = p)   # predictor matrix
+#' design <- cbind(1, X)                           # add intercept column
+#' p_i <- 1 / (1 + exp(-design %*% beta_true))     # probabilities
+#' y <- rbinom(n, size = 1, prob = p_i)            # response variable
+#' bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)
+
 bootstrap_ci <- function(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20) {
   n <- nrow(X)                # Number of observations
   p <- ncol(X)                # Number of predictors
