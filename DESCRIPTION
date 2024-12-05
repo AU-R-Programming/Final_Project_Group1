@@ -1,7 +1,7 @@
 Package: Optimization
 Type: Package
 Title: Implementing Supervised Binary Classification Using Numerical Optimization
-Version: 0.1.0
+Version: 0.1.1
 Author: Authors@R: c(
     person("Yuchen", "Wang", email = "yzw0174@auburn.edu", role = c("aut","cre")),
     person("Sarah", "Batten", email = "scb0122@auburn.edu" role = "aut"),
