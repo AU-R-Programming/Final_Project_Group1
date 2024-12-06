@@ -1,7 +1,7 @@
 ---
 title: "Optimization Vignette"
 output: html_document
-date: "2024-12-02"
+date: "2024-12-06"
 ---
 
 ```{r setup, include=FALSE}
@@ -72,13 +72,13 @@ There are three functions included in this package, and their descriptions and e
 
 ### opt_beta_est
 
-The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset based on the loss function that is provided above through minimizing the function. The response variable for this dataset is the `sex` column, which is column 3. 
+The opt_beta_est function can be used to estimate the vector $\beta$ for our dataset based on the loss function provided above through minimizing the function. The response variable for this dataset is the `sex` column, which is column 3. 
 
 ```{r,message=FALSE}
 library(Optimization)
 X <- design_matrix[, -3]
 y <- design_matrix[, 3]
-dim(X)
+dim(X) 
 length(y)
 beta_opt_func <- opt_beta_est(X, y)
 print(beta_opt_func)
@@ -86,13 +86,13 @@ length(beta_opt_func)
 ```
 This function returns the optimal estimated $\beta$ values for this dataset, where the response element is the sex of the patient. 
 
-The first element of $\beta$ corresponds to the intercept term, which represents the baseline log-odds of the outcome when all the predictors are zero. The other elements of $\beta$ are the weights of the predictors, where each coefficient measures the change in the log-odds of the outcome per unit increase in the corresponding predictor, assuming the other predictors are held constant. These coefficients provide a way to quantify the strength and direction of the relationship between each predictor and the log-odds of the outcome. For our example, BMI, children, and smoking are positive, indicating that as these predictors increase, the probability of a positive class increases as well. 
+The first element of $\beta$ corresponds to the intercept term, which represents the baseline log-odds of the outcome when all the predictors are zero. The other elements of $\beta$ are the weights of the predictors, where each coefficient measures the change in the log-odds of the outcome per unit increase in the corresponding predictor, assuming the other predictors are held constant. These coefficients provide a way to quantify the strength and direction of the relationship between each predictor and the log-odds of the outcome. For our example, BMI, children, and smoking are positive, indicating that as these predictors increase, the probability of a positive class increases as well. The opposite is true for the negative predictors. 
 
-This optimized $\beta$ vector provides the intercept and coefficients for the logisitc regression model that makes the model's predicted probabilities, $p_i$, closest to the actual outcome, $y_i$.
+This optimized $\beta$ vector provides the intercept and coefficients for the logisitic regression model that makes the model's predicted probabilities, $p_i$, closest to the actual outcome, $y_i$.
 
 ### bootstrap_ci
 
-Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
+Another function within this optimization package is the `bootstrap_ci` function. This function uses the bootstrap method of resampling to create confidence intervals at the specified confidence level, $\alpha$. The number of times the bootstrap procedure is repeated can be specified by the user, with the default being 20. 
 
 ```{r}
 bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)
@@ -102,7 +102,7 @@ The output of  this function is the $1 - \alpha$ confidence intervals, giving th
 
 ### confusion_metrics
 
-The last function that is included in this `Optimization` package creates a confusion matrix. It is based on a cut-off value for prediction, where the default is 0.5.
+The last function that is included in this `Optimization` package creates a confusion matrix. It is based on a cut-off value for prediction, which is 0.5.
 
 ```{r}
 # Predict probabilities and calculate metrics
@@ -116,6 +116,8 @@ metrics <- confusion_metrics(y, y_pred, cutoff = 0.5)
 print(metrics)
 ```
 The `confusion_metrics` function calculates various performance metrics for a binary classification model based on the true labels (\( y_{\text{true}} \)) and predicted probabilities (\( y_{\text{pred}} \)). Using a specified cutoff (default is 0.5), it converts probabilities into binary predictions and computes key metrics, including true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). From these, it derives metrics such as prevalence (proportion of positives in the data), accuracy, sensitivity (true positive rate), specificity (true negative rate), false discovery rate (FDR), and diagnostic odds ratio (DOR). The function returns these metrics as a list for model evaluation.
+
+The DOR being NA for this example is due to all of the value for y_pred being over 0.5, which is the given cut-off value. 
 
 
 

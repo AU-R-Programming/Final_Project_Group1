@@ -54,3 +54,4 @@ bootstrap_ci <- function(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20) {
 
   return(ci)  # Return the confidence intervals
 }
+

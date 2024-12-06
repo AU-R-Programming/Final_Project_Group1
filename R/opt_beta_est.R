@@ -60,7 +60,7 @@ opt_beta_est <- function(X, y){
   #X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
   beta_opt <- estimate_beta(X = X, y = y, beta_initial = as.vector(beta_initial))
-  cat("Estimated beta:", beta_opt$par, "\n")
+  #cat("Estimated beta:", beta_opt$par, "\n")
   return(beta_opt$par)
 }
 

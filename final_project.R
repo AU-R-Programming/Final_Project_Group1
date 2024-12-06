@@ -29,10 +29,10 @@ estimate_beta <- function(X, y, beta_init) {
 # putting above functions together
 
 opt_beta_est <- function(X, y){
-  X <- cbind(rep(1, n), X) # adding intercept
+  #X <- cbind(rep(1, n), X) # adding intercept
   beta_initial <- initial_beta(X = X, y = y)
   beta_opt <- estimate_beta(X = X, y = y, beta_init = beta_initial)
-  cat("Estimated beta:", beta_opt$par, "\n")
+  #cat("Estimated beta:", beta_opt$par, "\n")
   return(beta_opt$par)
 }
 
@@ -44,7 +44,7 @@ p <- 3     # number of predictors
 beta_true <- c(1.25, 0.5, -1, 0.75)  # true coefficients
 
 X <- matrix(rnorm(n * p), nrow = n, ncol = p)   # predictor matrix
-design <- cbind(1, X)                           # add intercept column
+X <- design <- cbind(1, X)                           # add intercept column
 p_i <- 1 / (1 + exp(-design %*% beta_true))     # probabilities
 y <- rbinom(n, size = 1, prob = p_i)            # response variable
 
@@ -93,6 +93,7 @@ bootstrap_ci <- function(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20) {
   return(ci)  # Return the confidence intervals
 }
 
+bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)
 
 
 
@@ -119,8 +120,8 @@ confusion_metrics <- function(y_true, y_pred) {
 }
 
 # Predict probabilities and calculate metrics
-X_design <- cbind(1, X)  # add intercept column
-p_hat <- 1 / (1 + exp(-X_design %*% beta_opt))  # use design matrix with intercept
+#X_design <- cbind(1, X)  # add intercept column, commented out bc this is created above
+p_hat <- 1 / (1 + exp(-X %*% beta_opt))  # use design matrix with intercept
 y_pred <- ifelse(p_hat > 0.5, 1, 0)  # classify predictions
 
 # Calculate metrics
