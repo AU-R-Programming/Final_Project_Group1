@@ -473,16 +473,6 @@ head(design_matrix)</code></pre>
 named Final_Project_Group1 within the AU-R-Programming organization.</p>
 <pre class="r"><code>library(devtools)
 install_github(&quot;AU-R-Programming/Final_Project_Group1&quot;)</code></pre>
-<pre><code>## ── R CMD build ─────────────────────────────────────────────────────────────────
-##          checking for file &#39;C:\Users\wangy\AppData\Local\Temp\Rtmp6NTjLH\remotes15486e3485f\AU-R-Programming-Final_Project_Group1-6d4b927/DESCRIPTION&#39; ...  ✔  checking for file &#39;C:\Users\wangy\AppData\Local\Temp\Rtmp6NTjLH\remotes15486e3485f\AU-R-Programming-Final_Project_Group1-6d4b927/DESCRIPTION&#39;
-##       ─  preparing &#39;Optimization&#39;:
-##    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-##       ─  checking for LF line-endings in source and make files and shell scripts
-##   ─  checking for empty or unneeded directories
-##    Omitted &#39;LazyData&#39; from DESCRIPTION
-##   ─  building &#39;Optimization_0.1.1.tar.gz&#39;
-##      
-## </code></pre>
 </div>
 <div id="using-the-optimization-package" class="section level2">
 <h2>Using the Optimization package</h2>
@@ -533,17 +523,17 @@ number of times the bootstrap procedure is repeated can be specified by
 the user, with the default being 20.</p>
 <pre class="r"><code>bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)</code></pre>
 <pre><code>##    Coefficient    Lower_CI    Upper_CI
-## 1            1 -0.61906518 -0.21863816
-## 2            2 -0.99608357  0.43254959
-## 3            3  2.42148317  2.54681129
-## 4            4  0.36055786  0.69128705
-## 5            5  0.57789069  0.72024640
-## 6            6 -0.06629484  0.20913217
-## 7            7 -1.30904698 -1.01053151
-## 8            8 -0.39954686  0.08040396
-## 9            9 -0.65186233 -0.17862057
-## 10          10 -0.64008690  0.09852380
-## 11          11 -0.13548685  0.28608829</code></pre>
+## 1            1 -0.73994075 -0.29435644
+## 2            2 -1.17517493  0.40412520
+## 3            3  2.41256280  2.54409629
+## 4            4  0.34460869  0.65318476
+## 5            5  0.57543582  0.70018269
+## 6            6 -0.14944682  0.08177239
+## 7            7 -1.31124455 -1.04032357
+## 8            8 -0.28798753  0.28124525
+## 9            9 -0.59020108 -0.07304507
+## 10          10 -0.47555472  0.22378232
+## 11          11 -0.05492521  0.39822159</code></pre>
 <p>The output of this function is the <span class="math inline">\(1 -
 \alpha\)</span> confidence intervals, giving the upper and lower limits
 for each element of the <span class="math inline">\(\beta\)</span>
