@@ -471,8 +471,6 @@ head(design_matrix)</code></pre>
 <h2>Installing the optimization package</h2>
 <p>The package is available for downloading from a GitHub repository
 named Final_Project_Group1 within the AU-R-Programming organization.</p>
-<pre class="r"><code>library(devtools)
-install_github(&quot;AU-R-Programming/Final_Project_Group1&quot;)</code></pre>
 </div>
 <div id="using-the-optimization-package" class="section level2">
 <h2>Using the Optimization package</h2>
@@ -495,8 +493,6 @@ dim(X) </code></pre>
 print(beta_opt_func)</code></pre>
 <pre><code>##  [1] -0.47250546 -0.06849855  2.48162264  0.50064162  0.64430466  0.01420457
 ##  [7] -1.17453279 -0.09671118 -0.37956717 -0.21938299  0.11984366</code></pre>
-<pre class="r"><code>length(beta_opt_func)</code></pre>
-<pre><code>## [1] 11</code></pre>
 <p>This function returns the optimal estimated <span class="math inline">\(\beta\)</span> values for this dataset.</p>
 <p>The first element of <span class="math inline">\(\beta\)</span>
 corresponds to the intercept term, which represents the baseline
@@ -525,17 +521,17 @@ number of times the bootstrap procedure is repeated can be specified by
 the user, with the default being 20.</p>
 <pre class="r"><code>bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)</code></pre>
 <pre><code>##    Coefficient    Lower_CI    Upper_CI
-## 1            1 -0.73186653 -0.29367300
-## 2            2 -0.61969651  0.92392166
-## 3            3  2.42580271  2.56294811
-## 4            4  0.37079347  0.67019385
-## 5            5  0.57916463  0.68270318
-## 6            6 -0.09125869  0.14530378
-## 7            7 -1.30629502 -1.02034655
-## 8            8 -0.31232619  0.09198470
-## 9            9 -0.56149913 -0.14435689
-## 10          10 -0.60244210  0.03602435
-## 11          11 -0.08146095  0.36729215</code></pre>
+## 1            1 -0.65319689 -0.27215838
+## 2            2 -0.90331253  0.68930259
+## 3            3  2.41677427  2.54113485
+## 4            4  0.36502137  0.69844389
+## 5            5  0.58739730  0.68746043
+## 6            6 -0.15660785  0.16108891
+## 7            7 -1.25883971 -1.06275670
+## 8            8 -0.28468324  0.18564699
+## 9            9 -0.60363385 -0.15990693
+## 10          10 -0.58577473  0.08637253
+## 11          11 -0.08889906  0.32974565</code></pre>
 <p>The output of this function is the <span class="math inline">\(1 -
 \alpha\)</span> confidence intervals, giving the upper and lower limits
 for each element of the <span class="math inline">\(\beta\)</span>
@@ -548,10 +544,13 @@ level.</p>
 <p>The last function that is included in this <code>Optimization</code>
 package creates a confusion matrix. It is based on a cut-off value for
 prediction, which is 0.5.</p>
-<pre class="r"><code>y_pred &lt;- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept  
+<pre class="r"><code># Compute predicted probabilities using the logistic function
+y_pred &lt;- 1 / (1 + exp(-X %*% beta_opt_func))  
 
-# Calculate metrics
-metrics &lt;- confusion_metrics(y, y_pred, cutoff = 0.5)# print confusion matrix metrics
+# Calculate and return confusion matrix metrics (e.g., accuracy, precision, recall)
+metrics &lt;- confusion_metrics(y, y_pred, cutoff = 0.5)
+
+# Print the confusion matrix metrics
 print(metrics)</code></pre>
 <pre><code>## $prevalence
 ## [1] 0.6692055
@@ -582,6 +581,22 @@ positives in the data), accuracy, sensitivity (true positive rate),
 specificity (true negative rate), false discovery rate (FDR), and
 diagnostic odds ratio (DOR). The function returns these metrics as a
 list for model evaluation.</p>
+<p>In our dataset, the <strong>prevalence</strong> of 0.669 indicates
+that 66.9% of the dataset belongs to the positive class. The
+<strong>accuracy</strong> of 0.728 demonstrates that the model correctly
+predicts the outcome 72.8% of the time. The <strong>sensitivity</strong>
+(true positive rate) is 0.859, suggesting the model is highly effective
+at identifying positive cases, capturing 85.9% of them. However, the
+<strong>specificity</strong> (true negative rate) is relatively low at
+0.463, indicating that the model struggles to correctly classify
+negative cases, correctly identifying only 46.3%. The <strong>false
+discovery rate (FDR)</strong> of 0.236 means that 23.6% of predicted
+positives are false positives. Finally, the <strong>diagnostic odds
+ratio (DOR)</strong> of 5.26 suggests the model has moderate
+discriminatory power, as higher DOR values reflect better diagnostic
+effectiveness. These metrics collectively suggest the model performs
+well for identifying positive cases but may need improvement in reducing
+false positives and better handling negative cases.</p>
 </div>
 </div>
 <div id="references" class="section level2">
@@ -590,6 +605,7 @@ list for model evaluation.</p>
 <p><a href="https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6" class="uri">https://chatgpt.com/share/674f3319-5394-8000-aecf-6dcc60bd14a6</a></p>
 <p><a href="https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7" class="uri">https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7</a></p>
 <p><a href="https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5" class="uri">https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5</a></p>
+<p><a href="https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed" class="uri">https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed</a></p>
 </div>
 
 

@@ -63,11 +63,6 @@ dim(design_matrix)
 
 The package is available for downloading from a GitHub repository named Final_Project_Group1 within the AU-R-Programming organization. 
 
-```{r, message=FALSE,warning=FALSE}
-library(devtools)
-install_github("AU-R-Programming/Final_Project_Group1")
-
-```
 
 ## Using the Optimization package
 There are three functions included in this package, and their descriptions and examples of how to use them are found below. 
@@ -84,7 +79,7 @@ dim(X)
 length(y)
 beta_opt_func <- opt_beta_est(X, y)
 print(beta_opt_func)
-length(beta_opt_func)
+
 ```
 This function returns the optimal estimated $\beta$ values for this dataset. 
 
@@ -107,15 +102,19 @@ The output of  this function is the $1 - \alpha$ confidence intervals, giving th
 The last function that is included in this `Optimization` package creates a confusion matrix. It is based on a cut-off value for prediction, which is 0.5.
 
 ```{r}
-y_pred <- 1 / (1 + exp(-X %*% beta_opt_func))  # use design matrix with intercept  
+# Compute predicted probabilities using the logistic function
+y_pred <- 1 / (1 + exp(-X %*% beta_opt_func))  
 
-# Calculate metrics
-metrics <- confusion_metrics(y, y_pred, cutoff = 0.5)# print confusion matrix metrics
+# Calculate and return confusion matrix metrics (e.g., accuracy, precision, recall)
+metrics <- confusion_metrics(y, y_pred, cutoff = 0.5)
+
+# Print the confusion matrix metrics
 print(metrics)
+
 ```
 The `confusion_metrics` function calculates various performance metrics for a binary classification model based on the true labels (\( y_{\text{true}} \)) and predicted probabilities (\( y_{\text{pred}} \)). Using a specified cutoff (default is 0.5), it converts probabilities into binary predictions and computes key metrics, including true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). From these, it derives metrics such as prevalence (proportion of positives in the data), accuracy, sensitivity (true positive rate), specificity (true negative rate), false discovery rate (FDR), and diagnostic odds ratio (DOR). The function returns these metrics as a list for model evaluation.
 
-
+In our dataset, the **prevalence** of 0.669 indicates that 66.9% of the dataset belongs to the positive class. The **accuracy** of 0.728 demonstrates that the model correctly predicts the outcome 72.8% of the time. The **sensitivity** (true positive rate) is 0.859, suggesting the model is highly effective at identifying positive cases, capturing 85.9% of them. However, the **specificity** (true negative rate) is relatively low at 0.463, indicating that the model struggles to correctly classify negative cases, correctly identifying only 46.3%. The **false discovery rate (FDR)** of 0.236 means that 23.6% of predicted positives are false positives. Finally, the **diagnostic odds ratio (DOR)** of 5.26 suggests the model has moderate discriminatory power, as higher DOR values reflect better diagnostic effectiveness. These metrics collectively suggest the model performs well for identifying positive cases but may need improvement in reducing false positives and better handling negative cases.
 
 
 ## References 
@@ -127,6 +126,6 @@ https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7
 
 https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5
 
+https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed
 
-
-
+https://chatgpt.com/share/674d1772-d064-8005-9b04-9679d24ff7d8
