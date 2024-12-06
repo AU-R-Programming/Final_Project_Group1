@@ -32,7 +32,7 @@ The basic outputs of the procedure are as follows:
   - Diagnostic Odds Ration
 - Help documentation for all functions is available. 
 
-To show examples of how to utilize this package, the expense.csv dataset will be used. 
+To show examples of how to utilize this package, the adult.csv dataset will be used. 
 
 ## Data Pre-Processing
 
@@ -90,7 +90,7 @@ This function returns the optimal estimated $\beta$ values for this dataset.
 
 The first element of $\beta$ corresponds to the intercept term, which represents the baseline log-odds of the outcome when all the predictors are zero. The other elements of $\beta$ are the weights of the predictors, where each coefficient measures the change in the log-odds of the outcome per unit increase in the corresponding predictor, assuming the other predictors are held constant. These coefficients provide a way to quantify the strength and direction of the relationship between each predictor and the log-odds of the outcome. For our example, married-civ-spouse is positive as the third element of $\beta$, indicating that as this predictor increases, the probability of a positive class increases as well. The opposite is true for the negative predictors. 
 
-This optimized $\beta$ vector provides the intercept and coefficients for the logisitic regression model that makes the model's predicted probabilities, $p_i$, closest to the actual outcome, $y_i$.
+This optimized $\beta$ vector provides the intercept and coefficients for the logistic regression model that makes the model's predicted probabilities, $p_i$, closest to the actual outcome, $y_i$.
 
 ### bootstrap_ci
 
@@ -99,7 +99,7 @@ Another function within this optimization package is the `bootstrap_ci` function
 ```{r}
 bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)
 ```
-The output of  this function is the $1 - \alpha$ confidence intervals, giving the upper and lower limits for each element of the $\beta$ vector. For this example, $\alpha = 0.05$, so the output corresponds to the 95% confidence level. 
+The output of  this function is the $1 - \alpha$ confidence intervals, giving the upper and lower limits for each element of the $\beta$ vector. For this example, $\alpha = 0.05$, so the output corresponds to the 95% confidence level for each of the predictors. 
 
 
 ### confusion_metrics
