@@ -391,7 +391,7 @@ the cut-off value:
 </ul></li>
 <li>Help documentation for all functions is available.</li>
 </ul>
-<p>To show examples of how to utilize this package, the expense.csv
+<p>To show examples of how to utilize this package, the adult.csv
 dataset will be used.</p>
 <div id="data-pre-processing" class="section level2">
 <h2>Data Pre-Processing</h2>
@@ -471,6 +471,18 @@ head(design_matrix)</code></pre>
 <h2>Installing the optimization package</h2>
 <p>The package is available for downloading from a GitHub repository
 named Final_Project_Group1 within the AU-R-Programming organization.</p>
+<pre class="r"><code>library(devtools)
+install_github(&quot;AU-R-Programming/Final_Project_Group1&quot;)</code></pre>
+<pre><code>## ── R CMD build ─────────────────────────────────────────────────────────────────
+##          checking for file &#39;C:\Users\wangy\AppData\Local\Temp\Rtmp6NTjLH\remotes15486e3485f\AU-R-Programming-Final_Project_Group1-6d4b927/DESCRIPTION&#39; ...  ✔  checking for file &#39;C:\Users\wangy\AppData\Local\Temp\Rtmp6NTjLH\remotes15486e3485f\AU-R-Programming-Final_Project_Group1-6d4b927/DESCRIPTION&#39;
+##       ─  preparing &#39;Optimization&#39;:
+##    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+##       ─  checking for LF line-endings in source and make files and shell scripts
+##   ─  checking for empty or unneeded directories
+##    Omitted &#39;LazyData&#39; from DESCRIPTION
+##   ─  building &#39;Optimization_0.1.1.tar.gz&#39;
+##      
+## </code></pre>
 </div>
 <div id="using-the-optimization-package" class="section level2">
 <h2>Using the Optimization package</h2>
@@ -508,7 +520,7 @@ our example, married-civ-spouse is positive as the third element of
 predictor increases, the probability of a positive class increases as
 well. The opposite is true for the negative predictors.</p>
 <p>This optimized <span class="math inline">\(\beta\)</span> vector
-provides the intercept and coefficients for the logisitic regression
+provides the intercept and coefficients for the logistic regression
 model that makes the model’s predicted probabilities, <span class="math inline">\(p_i\)</span>, closest to the actual outcome, <span class="math inline">\(y_i\)</span>.</p>
 </div>
 <div id="bootstrap_ci" class="section level3">
@@ -521,23 +533,23 @@ number of times the bootstrap procedure is repeated can be specified by
 the user, with the default being 20.</p>
 <pre class="r"><code>bootstrap_ci(X, y, beta_opt_func, alpha = 0.05, n_bootstrap = 20)</code></pre>
 <pre><code>##    Coefficient    Lower_CI    Upper_CI
-## 1            1 -0.65319689 -0.27215838
-## 2            2 -0.90331253  0.68930259
-## 3            3  2.41677427  2.54113485
-## 4            4  0.36502137  0.69844389
-## 5            5  0.58739730  0.68746043
-## 6            6 -0.15660785  0.16108891
-## 7            7 -1.25883971 -1.06275670
-## 8            8 -0.28468324  0.18564699
-## 9            9 -0.60363385 -0.15990693
-## 10          10 -0.58577473  0.08637253
-## 11          11 -0.08889906  0.32974565</code></pre>
+## 1            1 -0.61906518 -0.21863816
+## 2            2 -0.99608357  0.43254959
+## 3            3  2.42148317  2.54681129
+## 4            4  0.36055786  0.69128705
+## 5            5  0.57789069  0.72024640
+## 6            6 -0.06629484  0.20913217
+## 7            7 -1.30904698 -1.01053151
+## 8            8 -0.39954686  0.08040396
+## 9            9 -0.65186233 -0.17862057
+## 10          10 -0.64008690  0.09852380
+## 11          11 -0.13548685  0.28608829</code></pre>
 <p>The output of this function is the <span class="math inline">\(1 -
 \alpha\)</span> confidence intervals, giving the upper and lower limits
 for each element of the <span class="math inline">\(\beta\)</span>
 vector. For this example, <span class="math inline">\(\alpha =
-0.05\)</span>, so the output corresponds to the 95% confidence
-level.</p>
+0.05\)</span>, so the output corresponds to the 95% confidence level for
+each of the predictors.</p>
 </div>
 <div id="confusion_metrics" class="section level3">
 <h3>confusion_metrics</h3>
@@ -606,6 +618,7 @@ false positives and better handling negative cases.</p>
 <p><a href="https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7" class="uri">https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7</a></p>
 <p><a href="https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5" class="uri">https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5</a></p>
 <p><a href="https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed" class="uri">https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed</a></p>
+<p><a href="https://chatgpt.com/share/674d1772-d064-8005-9b04-9679d24ff7d8" class="uri">https://chatgpt.com/share/674d1772-d064-8005-9b04-9679d24ff7d8</a></p>
 </div>
 
 

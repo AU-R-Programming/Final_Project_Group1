@@ -63,6 +63,11 @@ dim(design_matrix)
 
 The package is available for downloading from a GitHub repository named Final_Project_Group1 within the AU-R-Programming organization. 
 
+```{r message=FALSE, warning=FALSE}
+library(devtools)
+install_github("AU-R-Programming/Final_Project_Group1")
+```
+
 
 ## Using the Optimization package
 There are three functions included in this package, and their descriptions and examples of how to use them are found below. 
@@ -126,11 +131,8 @@ https://chatgpt.com/c/674ce4d0-c7ac-8011-a38d-c663f701e0c7
 
 https://chatgpt.com/c/674cf199-9ff0-8011-a4ad-62071ca7eef5
 
-<<<<<<< HEAD
 https://chatgpt.com/g/g-2DQzU5UZl-code-copilot/c/67522702-ff84-8011-9626-810ce7d778ed
-=======
-https://chatgpt.com/share/674d1772-d064-8005-9b04-9679d24ff7d8
-
->>>>>>> 1ead3444faa2b12adffd1f3e26c571e0aa9e8a47
 
 https://chatgpt.com/share/674d1772-d064-8005-9b04-9679d24ff7d8
+
+
